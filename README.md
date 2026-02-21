@@ -87,40 +87,45 @@ Email: test.user@example.com
 Password: password123
 📁 Project Structure
 text
-my-ecommerce-app/
-├── components/          # React components
-│   └── Header.tsx      # Navigation header with auth
-├── lib/
-│   └── prisma.ts       # Prisma client singleton
-├── pages/
-│   ├── api/            # API routes
-│   │   ├── auth/       # NextAuth.js configuration
-│   │   └── cart/       # Cart API endpoints
-│   ├── auth/
-│   │   └── signin.tsx  # Custom sign-in page
-│   ├── products/
-│   │   └── [id].tsx    # Product detail page (SSR)
-│   ├── _app.tsx        # App wrapper with SessionProvider
-│   ├── cart.tsx        # Shopping cart page
-│   └── index.tsx       # Homepage with product listing (SSR)
-├── prisma/
-│   ├── schema.prisma   # Database schema
-│   └── seed.js         # Database seeding script
-├── public/             # Static assets
-├── styles/
-│   └── globals.css     # Global styles
-├── types/
-│   └── next-auth.d.ts  # TypeScript types for NextAuth
-├── .env                # Environment variables
-├── .env.example        # Example environment variables
-├── next.config.js      # Next.js configuration
-├── package.json        # Dependencies and scripts
-├── postcss.config.js   # PostCSS configuration
-├── proxy.ts            # Route protection middleware
-├── submission.json     # Test user credentials
-├── tailwind.config.js  # Tailwind CSS configuration
-└── tsconfig.json       # TypeScript configuration
-🔌 API Routes
+📦 ecommerce-catalog-project
+├── 📂 components
+│   └── Header.tss                # Navigation header with auth
+├── 📂 lib
+│   └── prisma.ts                  # Prisma client singleton
+├── 📂 pages
+│   ├── 📂 api
+│   │   ├── 📂 auth
+│   │   │   └── [...nextauth].ts   # NextAuth.js configuration
+│   │   └── 📂 cart
+│   │       └── index.ts            # Cart API endpoints
+│   ├── 📂 auth
+│   │   └── signin.tsx              # Custom sign-in page
+│   ├── 📂 products
+│   │   └── [id].tsx                # Product detail page (SSR)
+│   ├── _app.tsx                     # App wrapper with SessionProvider
+│   ├── cart.tsx                     # Shopping cart page
+│   └── index.tsx                     # Homepage with product listing (SSR)
+├── 📂 prisma
+│   ├── schema.prisma                 # Database schema
+│   └── seed.js                       # Database seeding script
+├── 📂 public                          # Static assets
+├── 📂 styles
+│   └── globals.css                    # Global styles
+├── 📂 types
+│   └── next-auth.d.ts                  # TypeScript types for NextAuth
+├── .env                                # Environment variables
+├── .env.example                        # Example environment variables
+├── .gitignore                          # Git ignore file
+├── docker-compose.yml                   # Docker compose configuration
+├── Dockerfile                           # Docker configuration
+├── next.config.js                       # Next.js configuration
+├── package.json                         # Dependencies and scripts
+├── postcss.config.js                    # PostCSS configuration
+├── proxy.ts                             # Route protection middleware
+├── submission.json                      # Test user credentials
+├── tailwind.config.js                    # Tailwind CSS configuration
+└── tsconfig.json                        # TypeScript configuration
+ API Routes
 Endpoint	Method	Description	Auth Required
 /api/cart	GET	Get user's cart	✅
 /api/cart	POST	Add item to cart	✅
