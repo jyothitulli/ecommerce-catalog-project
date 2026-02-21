@@ -1,14 +1,15 @@
 // pages/api/auth/[...nextauth].ts
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import GitHubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { prisma } from "../../../lib/prisma"
 import bcrypt from "bcryptjs"
+import type { JWT } from "next-auth/jwt"
+import type { Session, User } from "next-auth"
 
-// Define authOptions as a separate export
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHubProvider({
@@ -26,10 +27,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        console.log("Authorize called with:", credentials?.email)
-        
         if (!credentials?.email || !credentials?.password) {
-          console.log("Missing credentials")
           throw new Error("Invalid credentials")
         }
 
@@ -39,17 +37,7 @@ export const authOptions = {
           }
         })
 
-        console.log("User found:", user ? "Yes" : "No")
-        
-        if (!user) {
-          console.log("User not found")
-          throw new Error("Invalid credentials")
-        }
-
-        console.log("User has password:", !!user.password)
-        
-        if (!user.password) {
-          console.log("User has no password")
+        if (!user || !user.password) {
           throw new Error("Invalid credentials")
         }
 
@@ -58,10 +46,7 @@ export const authOptions = {
           user.password
         )
 
-        console.log("Password correct:", isCorrectPassword)
-
         if (!isCorrectPassword) {
-          console.log("Password incorrect")
           throw new Error("Invalid credentials")
         }
 
@@ -75,13 +60,13 @@ export const authOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user: User }) {
       if (user) {
         token.id = user.id
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (session?.user) {
         session.user.id = token.id as string
       }
@@ -97,5 +82,4 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 }
 
-// Export default NextAuth with authOptions
 export default NextAuth(authOptions)

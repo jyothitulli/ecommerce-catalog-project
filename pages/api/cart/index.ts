@@ -1,7 +1,7 @@
 // pages/api/cart/index.ts
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '../auth/[...nextauth]'  // This should now work
+import { authOptions } from '../auth/[...nextauth]'
 import { prisma } from '../../../lib/prisma'
 import { z } from 'zod'
 
@@ -69,7 +69,7 @@ export default async function handler(
       if (!validationResult.success) {
         return res.status(400).json({ 
           error: 'Invalid request body', 
-          details: validationResult.error.errors 
+          details: validationResult.error.format() // Changed from .errors to .format()
         })
       }
 
@@ -152,7 +152,7 @@ export default async function handler(
       if (!validationResult.success) {
         return res.status(400).json({ 
           error: 'Invalid request body', 
-          details: validationResult.error.errors 
+          details: validationResult.error.format() // Changed from .errors to .format()
         })
       }
 

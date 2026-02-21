@@ -1,6 +1,7 @@
 // pages/index.tsx
 import { GetServerSideProps } from 'next'
 import { prisma } from '../lib/prisma'
+import { Prisma } from '@prisma/client'
 import { useState } from 'react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
@@ -186,15 +187,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const productsPerPage = 8
   const searchQuery = q as string
 
-  // Build where clause for search
-  const where = searchQuery
-    ? {
-        OR: [
-          { name: { contains: searchQuery, mode: 'insensitive' } },
-          { description: { contains: searchQuery, mode: 'insensitive' } }
-        ]
-      }
-    : {}
+  // Build where clause for search with proper Prisma types
+  let where: Prisma.ProductWhereInput = {}
+  
+  if (searchQuery) {
+    where = {
+      OR: [
+        {
+          name: {
+            contains: searchQuery,
+            mode: 'insensitive' as Prisma.QueryMode
+          }
+        },
+        {
+          description: {
+            contains: searchQuery,
+            mode: 'insensitive' as Prisma.QueryMode
+          }
+        }
+      ]
+    }
+  }
 
   // Get total count for pagination
   const totalProducts = await prisma.product.count({ where })
@@ -211,7 +224,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      products: JSON.parse(JSON.stringify(products)), // Serialize dates
+      products: JSON.parse(JSON.stringify(products)),
       totalProducts,
       currentPage,
       totalPages,
