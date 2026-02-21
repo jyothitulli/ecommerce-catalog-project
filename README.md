@@ -250,8 +250,10 @@ Check credentials in .env
 
 Run npx prisma db push to sync schema
 
-Can't sign in?
-
-Run npm run db:seed to recreate test user
-
-Check submission.json matches seeded user# New Feature
+## ⚠️ Important Setup Notes
+- Create .env file from .env.example
+- Set DATABASE_URL to your PostgreSQL connection
+- Run `npm install`
+- Run `npx prisma db push`
+- Run `npm run db:seed` 
+- Run `npm run dev`
